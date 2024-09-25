@@ -1,1 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PVPN</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Simple Proxy Server</h1>
+    <form id="proxy-form">
+        <label for="url">Enter URL to Proxy:</label>
+        <input type="url" id="url" placeholder="http://example.com" required>
+        <button type="submit">Send Request</button>
+    </form>
+    <h2>Response:</h2>
+    <pre id="response"></pre>
 
+    <script>
+        document.getElementById('proxy-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const url = document.getElementById('url').value;
+            const responseElement = document.getElementById('response');
+            responseElement.textContent = 'Loading...';
+
+            try {
+                const proxyResponse = await fetch(`/proxy?url=${encodeURIComponent(url)}`);
+                const data = await proxyResponse.text();
+                responseElement.textContent = data;
+            } catch (error) {
+                responseElement.textContent = 'Error: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
